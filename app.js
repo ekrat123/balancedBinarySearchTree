@@ -7,21 +7,18 @@ class Node {
 }
 
 class Tree {
-  constructor(array) {
-    this.root = this.buildTree(array, 0, array.length - 1);
+  constructor(array = null) {
+    this.root = array === null ? null : this.buildTree(this.sortArray(array));
   }
 
-  buildTree(array, start, end) {
-    // Base Case
+  buildTree(array, start = 0, end = array.length - 1) {
     if (start > end) {
       return null;
     }
 
-    // Get the middle element and make it the root
     const mid = Math.floor((start + end) / 2);
     const root = new Node(array[mid]);
 
-    // Recursively construct the left and right subtrees
     root.left = this.buildTree(array, start, mid - 1);
     root.right = this.buildTree(array, mid + 1, end);
 
@@ -31,7 +28,7 @@ class Tree {
   uniqArray(array) {
     const uniqArray = [];
     for (let i = 0; i < array.length; i++) {
-      if (!uniqArray.includes(array[i])) {
+      if (uniqArray.indexOf(array[i]) === -1) {
         uniqArray.push(array[i]);
       }
     }
@@ -63,8 +60,8 @@ class Tree {
     const middle = Math.floor(arr.length / 2);
     const leftArr = arr.slice(0, middle);
     const rightArr = arr.slice(middle);
-    const sortedLeftArr = mergeSort(leftArr);
-    const sortedRightArr = mergeSort(rightArr);
+    const sortedLeftArr = this.mergeSort(leftArr);
+    const sortedRightArr = this.mergeSort(rightArr);
     return this.merge(sortedLeftArr, sortedRightArr);
   }
 
@@ -84,12 +81,30 @@ class Tree {
       this.printTree(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
     }
   }
+
+  insert(value) {
+    this.root = this._insert(this.root, value);
+  }
+
+  _insert(root, value) {
+    if (root === null) {
+      return new Node(value);
+    }
+
+    if (value < root.data) {
+      root.left = this._insert(root.left, value);
+    } else {
+      root.right = this._insert(root.right, value);
+    }
+
+    return root;
+  }
 }
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const newTree = new Tree(arr);
 
-// newTree.printTree();
-
-console.log(newTree.root);
+//newTree.insert();
+newTree.printTree();
+// console.log(newTree);
