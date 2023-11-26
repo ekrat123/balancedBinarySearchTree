@@ -99,11 +99,62 @@ class Tree {
 
     return root;
   }
+
+  delete(value) {
+    this.root = this._delete(this.root, value);
+  }
+
+  _delete(root, value) {
+    if (root === null) {
+      return root; // Value not found
+    }
+
+    // If the value to be deleted is smaller than the root's value,
+    // then it lies in the left subtree.
+    if (value < root.data) {
+      root.left = this._delete(root.left, value);
+    }
+    // If the value to be deleted is greater than the root's value,
+    // then it lies in the right subtree.
+    else if (value > root.data) {
+      root.right = this._delete(root.right, value);
+    }
+    // If the value is the same as the root's value,
+    // then this is the node to be deleted.
+    else {
+      // Node with only one child or no child
+      if (root.left === null) {
+        return root.right;
+      } else if (root.right === null) {
+        return root.left;
+      }
+
+      // Node with two children
+      // Get the inorder successor (smallest node in the right subtree)
+      root.data = this.findMinValue(root.right);
+
+      // Delete the inorder successor
+      root.right = this._delete(root.right, root.data);
+    }
+
+    return root;
+  }
+
+  findMinValue(node) {
+    let minValue = node.data;
+    while (node.left !== null) {
+      minValue = node.left.data;
+      node = node.left;
+    }
+    return minValue;
+  }
 }
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const newTree = new Tree(arr);
+newTree.printTree();
+newTree.delete(8);
 
 //newTree.insert();
 newTree.printTree();
