@@ -148,14 +148,78 @@ class Tree {
     }
     return minValue;
   }
+
+  find(value, root = this.root) {
+    // Base case: If the root is null or the value is found
+    if (root === null || root.data === value) {
+      return root;
+    }
+
+    // Recursive cases
+    if (value < root.data) {
+      return this.find(root.left, value);
+    } else {
+      return this.find(root.right, value);
+    }
+  }
+
+  levelOrder(callback, node = this.root) {
+    const s = callback;
+    const que = [];
+    const result = [];
+
+    if (node !== null) {
+      que.push(node);
+    }
+
+    callback =
+      callback ||
+      function (node) {
+        result.push(node.data);
+      };
+
+    while (que.length > 0) {
+      const currentNode = que.shift();
+      callback(currentNode);
+
+      if (currentNode.left !== null) {
+        que.push(currentNode.left);
+      }
+      if (currentNode.right !== null) {
+        que.push(currentNode.right);
+      }
+    }
+    if (!s) {
+      return result;
+    }
+  }
+
+  inOrder(callback) {
+    const s = callback;
+    const result = [];
+    callback =
+      callback ||
+      function (node) {
+        result.push(node.data);
+      };
+    this._inOrder(callback);
+    if (!s) {
+      return result;
+    }
+  }
+
+  _inOrder(callback, node = this.root) {
+    if (node === null) {
+      return;
+    }
+    this._inOrder(callback, node.left);
+    callback(node);
+    this._inOrder(callback, node.right);
+  }
 }
 
 const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const newTree = new Tree(arr);
-newTree.printTree();
-newTree.delete(8);
 
-//newTree.insert();
-newTree.printTree();
-// console.log(newTree);
+newTree.inOrder((a) => console.log(a.data));
