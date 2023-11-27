@@ -277,14 +277,20 @@ class Tree {
   }
 
   getDepth(value, root = this.root) {
-    if (root === null || root.data === value) {
+    if (root === null) {
+      return -1; // Value not found in the tree
+    }
+
+    if (value === root.data) {
       return 0;
     }
 
     if (value < root.data) {
-      return this.getDepth(value, root.left) + 1;
+      const leftDepth = this.getDepth(value, root.left);
+      return leftDepth !== -1 ? leftDepth + 1 : -1;
     } else {
-      return this.getDepth(value, root.right) + 1;
+      const rightDepth = this.getDepth(value, root.right);
+      return rightDepth !== -1 ? rightDepth + 1 : -1;
     }
   }
 
@@ -311,18 +317,20 @@ class Tree {
   }
 }
 
-/* const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const newTree = new Tree(arr);
 newTree.insert(6346);
 newTree.insert(6347);
 newTree.insert(6348);
-newTree.printTree();
+// newTree.printTree();
 
 newTree.reBalance();
 newTree.printTree();
- */
 
+console.log(newTree.getHeight(9));
+
+/*
 function getArr(count = 20, limit = 100) {
   const arr = [];
   for (let i = 0; i < count; i++) {
@@ -336,13 +344,13 @@ const t = new Tree(getArr());
 t.printTree();
 console.log(t.isBalanced());
 
-/* t.inOrder((a) => console.log(a.data));
+ t.inOrder((a) => console.log(a.data));
 console.log("");
 t.preOrder((a) => console.log(a.data));
 console.log("");
 t.postOrder((a) => console.log(a.data));
 console.log("");
-t.levelOrder((a) => console.log(a.data)); */
+t.levelOrder((a) => console.log(a.data)); 
 t.insert(101);
 t.insert(105);
 t.insert(200);
@@ -353,3 +361,4 @@ console.log(t.isBalanced());
 t.reBalance();
 t.printTree();
 console.log(t.isBalanced());
+*/
