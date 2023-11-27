@@ -275,12 +275,81 @@ class Tree {
     const rightHeight = this._getHeight(node.right);
     return Math.max(leftHeight, rightHeight) + 1;
   }
+
+  getDepth(value, root = this.root) {
+    if (root === null || root.data === value) {
+      return 0;
+    }
+
+    if (value < root.data) {
+      return this.getDepth(value, root.left) + 1;
+    } else {
+      return this.getDepth(value, root.right) + 1;
+    }
+  }
+
+  isBalanced(node = this.root) {
+    if (node === null) {
+      return true; // An empty tree is balanced
+    }
+
+    const leftHeight = this._getHeight(node.left);
+    const rightHeight = this._getHeight(node.right);
+
+    // Check if the current node is balanced
+    if (Math.abs(leftHeight - rightHeight) <= 1) {
+      // Recursively check the balance of the left and right subtrees
+      return this.isBalanced(node.left) && this.isBalanced(node.right);
+    } else {
+      return false;
+    }
+  }
+
+  reBalance() {
+    const arr = this.inOrder();
+    this.root = this.buildTree(arr);
+  }
 }
 
-const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+/* const arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 
 const newTree = new Tree(arr);
+newTree.insert(6346);
+newTree.insert(6347);
+newTree.insert(6348);
 newTree.printTree();
 
-console.log(newTree.getHeight(67));
-// console.log(a);
+newTree.reBalance();
+newTree.printTree();
+ */
+
+function getArr(count = 20, limit = 100) {
+  const arr = [];
+  for (let i = 0; i < count; i++) {
+    const randomNum = Math.ceil(Math.random() * limit);
+    arr.push(randomNum);
+  }
+  return arr;
+}
+
+const t = new Tree(getArr());
+t.printTree();
+console.log(t.isBalanced());
+
+/* t.inOrder((a) => console.log(a.data));
+console.log("");
+t.preOrder((a) => console.log(a.data));
+console.log("");
+t.postOrder((a) => console.log(a.data));
+console.log("");
+t.levelOrder((a) => console.log(a.data)); */
+t.insert(101);
+t.insert(105);
+t.insert(200);
+t.insert(255);
+t.insert(300);
+t.printTree();
+console.log(t.isBalanced());
+t.reBalance();
+t.printTree();
+console.log(t.isBalanced());
